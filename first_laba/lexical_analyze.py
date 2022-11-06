@@ -22,8 +22,7 @@ class ELexType(Enum):
     OR = 5
     ARITHMETIC_OPERATION = 6
     ASSIGNMENT = 7
-    # INPUT = 8
-    UNDEFINED = 9
+    UNDEFINED = 8
 
 
 class ELexClass(Enum):
@@ -45,11 +44,12 @@ class Lexeme:
 
 
 class Lexics:
-    def __init__(self):
+    def __init__(self, filepath: str):
         self.lexemes = []
+        self.filepath = filepath
 
     def start(self):
-        with open('code.pasha', 'r', encoding='utf-8') as code_reader:
+        with open(self.filepath, 'r', encoding='utf-8') as code_reader:
             code = code_reader.read().replace('\n', ' ').lower().split(' ')
             print(code)
 
@@ -230,16 +230,3 @@ class Lexics:
         lexeme = Lexeme(lex_type, lex_class, value)
 
         self.lexemes.append(lexeme)
-
-
-def main():
-    lexics_analyzer = Lexics()
-    result = lexics_analyzer.start()
-    lexemes = lexics_analyzer.lexemes
-
-    for lexeme in lexemes:
-        print(lexeme)
-
-
-if __name__ == '__main__':
-    main()
