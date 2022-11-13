@@ -1,4 +1,4 @@
-from first_laba.lexical_analyze import ELexType, Lexeme
+from first_laba.lexical_analyze import ELexType, ELexClass, Lexeme
 
 
 class SyntaxAnalyzer:
@@ -69,7 +69,7 @@ class SyntaxAnalyzer:
     def log_expr(self) -> bool:
         if not self.rel_expr():
             return False
-        while self.lexemes[self.pos].type == ELexType.AND:
+        while self.lexemes[self.pos].type == ELexType.AND or self.lexemes[self.pos].type == ELexType.OR:
             print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
             self.pos += 1
             if not self.rel_expr():
@@ -78,12 +78,12 @@ class SyntaxAnalyzer:
         return True
 
     def rel_expr(self) -> bool:
-        if not self.operand():
+        if not self.arith_expr():
             return False
         if self.lexemes[self.pos].type == ELexType.RELATION:
             print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
             self.pos += 1
-            if not self.operand():
+            if not self.arith_expr():
                 return False
 
         return True
@@ -102,7 +102,6 @@ class SyntaxAnalyzer:
         return True
 
     def logical_op(self) -> bool:
-        print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
         if self.lexemes[self.pos].type != ELexType.AND and self.lexemes[self.pos].type != ELexType.OR:
             error = {
                 'error_text': 'Ожидается логическая операция.',
@@ -115,10 +114,7 @@ class SyntaxAnalyzer:
         return True
 
     def statement(self) -> bool:
-        print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
-        if self.lexemes[self.pos].type == ELexType.INPUT and self.lexemes[self.pos + 1].type == ELexType.UNDEFINED:
-            self.pos += 2
-        if self.lexemes[self.pos].type != ELexType.UNDEFINED:
+        if self.lexemes[self.pos].type != ELexType.UNDEFINED and self.lexemes[self.pos].type != ELexClass.IDENTIFIER:
             error = {
                 'error_text': 'Ожидается переменная.',
                 'pos': self.pos,

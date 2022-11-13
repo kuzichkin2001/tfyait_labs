@@ -216,8 +216,6 @@ class Lexics:
                 lex_type = ELexType.UNTIL
             elif value == 'loop':
                 lex_type = ELexType.LOOP
-            # elif value == 'input':
-                # lex_type = ELexType.INPUT
             else:
                 lex_type = ELexType.UNDEFINED
                 is_keyword = False
