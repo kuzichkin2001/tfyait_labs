@@ -52,8 +52,8 @@ class SyntaxAnalyzer:
         idx_jmp_exit = self.write_cmd_ptr(-1)
         self.write_cmd(ECmd.JZ)
 
-        if not self.statement():
-            return False
+        while self.statement():
+            continue
 
         print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
         if self.lexemes[self.pos].type != ELexType.LOOP:
@@ -88,15 +88,6 @@ class SyntaxAnalyzer:
     def log_expr(self) -> bool:
         if not self.rel_expr():
             return False
-        while self.lexemes[self.pos].type == ELexType.AND or self.lexemes[self.pos].type == ELexType.OR:
-            print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
-            if self.lexemes[self.pos].type == ELexType.AND:
-                self.write_cmd(ECmd.AND)
-            else:
-                self.write_cmd(ECmd.OR)
-            self.pos += 1
-            if not self.rel_expr():
-                return False
 
         return True
 

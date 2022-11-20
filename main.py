@@ -1,6 +1,7 @@
 from first_laba.lexical_analyze import Lexics
 from second_laba.syntax_analyzer import SyntaxAnalyzer
 from third_laba.entry_type import EEntryType
+from fourth_laba.interpreter import Interpreter
 
 
 def main():
@@ -22,6 +23,17 @@ def main():
                 print(entry.cmd.name, end=' ')
             elif entry.entry_type == EEntryType.CMD_PTR:
                 print(entry.cmd_ptr, end=' ')
+
+        print("""
+Interpretation.
+--------------------------------------
+
+
+        """)
+
+        interpreter = Interpreter(syntax_result=ok, syntax_response=response)
+
+        interpreter.start()
     else:
         print('Синтаксический анализ завершен с ошибками: ', syntax_analyzer.errors)
 
