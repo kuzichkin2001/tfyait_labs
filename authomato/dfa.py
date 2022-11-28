@@ -13,8 +13,8 @@ class DFA:
 
         if is_file:
             with open(kwargs['path'], 'r', encoding='utf-8') as file:
-                self.sigma = set(file.readline().split())
-                states = file.readline().split()
+                self.sigma = set(file.readline().split(','))
+                states = file.readline().split(',')
                 for state in states:
                     if '->' in state:
                         self.initialState = state[2::]
@@ -27,7 +27,7 @@ class DFA:
                     self.Q.add(state)
                 for line in file:
                     state, values = line.split(':')[0], line.split(':')[1]
-                    self.delta[state] = {value.split(',')[0]: value.split(',')[1] for value in values.split()}
+                    self.delta[state] = {value.split(' ')[0]: value.split(' ')[1] for value in values.split('; ')}
         else:
             self.Q = kwargs['Q']
             self.sigma = kwargs['sigma']

@@ -27,7 +27,7 @@ class NFA:
                         continue
                     self.Q.add(state)
                 for line in file:
-                    state, values = line.split(':')[0], line.split(':')[1]
+                    state, values = line.split(' -')[0], line.split(' -')[1]
                     self.delta[state] = dict()
                     for value in values.split():
                         cur = value.split(',')
