@@ -1,3 +1,1 @@
-dO uNtIl a + 2 > 10 OR a + 4 < b - 10
-a = A + 1
-loop
+do until a <= 5 or b + 3 >= 7 input b a = a + b loop
