@@ -128,7 +128,7 @@ class Interpreter:
             return 0
 
     def push_val(self, val: int) -> None:
-        entry: Entry = Entry(entry_type=EEntryType.CONST, value=str(val))
+        entry: Entry = Entry(entry_type=EEntryType.CONST, value=int(val))
 
         self.stack.append(entry)
 

@@ -8,14 +8,25 @@ def main():
     #     print('Цепочка распознана')
     # else:
     #     print('Цепочка не распознана')
+    #
+    # d.show_data()
 
     n = NFA(is_file=True, path='nfa.txt')
+    n.show_data()
+
+    print('-' * 30)
+
     n = n.removeEpsilonTransitions()
+    n.show_data()
+
+    print('-' * 30)
+
     n = n.getDFA()
-    if n.accept('bbaa'):
-        print('Цепочка распознана')
-    else:
-        print('Цепочка не распознана')
+    n.show_data()
+    # if n.accept('bbaa'):
+    #     print('Цепочка распознана')
+    # else:
+    #     print('Цепочка не распознана')
 
     # n = NFA(is_file=True, path='nfa.txt')
     # n.show_data()

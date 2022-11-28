@@ -76,7 +76,7 @@ class NFA:
                         for state in states:
                             # Do not consume character
                             q.append([idx, state])
-                            print(f"Слово:{S[idx]}, индекс символа: {idx}, переход: {frontQ[1]} -> {state}")
+                            print(f"Слово:_, индекс символа: {idx}, переход: {frontQ[1]} -> {state}")
                     elif S[idx] == d:
                         for state in states:
                             # Consume character
@@ -126,7 +126,7 @@ class NFA:
     def getEClosure(self, q, visited=None):
         ans = [q]
         if visited is None:
-            visited = list(q)
+            visited = [q]
 
         if q in self.delta:
             if '_' in self.delta[q]:

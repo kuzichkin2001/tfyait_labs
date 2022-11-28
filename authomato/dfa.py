@@ -35,8 +35,6 @@ class DFA:
             self.initialState = kwargs['initialState']
             self.F = kwargs['F']
 
-
-
     def accept(self, S: str) -> bool:
         ## Basic Idea: Search through states (delta) in the DFA, since the initial state to the final states
 
@@ -57,6 +55,7 @@ class DFA:
             elif S[idx] not in self.sigma:
                 raise InputError(S[idx], 'Is not declared in sigma')
             elif state in self.delta:
+                # self.delta = { 'q0': { 'a': 'q1', 'b': 'q3', 'c': 'q6' }, ... }
                 ## Search through states
                 for transition in self.delta[state].items():
                     ## transition = ('1', 'q0')

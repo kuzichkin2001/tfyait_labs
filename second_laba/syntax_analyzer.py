@@ -52,8 +52,8 @@ class SyntaxAnalyzer:
         idx_jmp_exit = self.write_cmd_ptr(-1)
         self.write_cmd(ECmd.JZ)
 
-        while self.statement():
-            continue
+        if not self.statement():
+            return False
 
         print(self.lexemes[self.pos].val, self.lexemes[self.pos].type, self.pos)
         if self.lexemes[self.pos].type != ELexType.LOOP:
