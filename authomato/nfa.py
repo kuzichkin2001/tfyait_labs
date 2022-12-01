@@ -4,6 +4,18 @@ from collections import deque
 from authomato.dfa import DFA
 
 
+def transpose(table):
+    result = []
+
+    for i in range(len(table[0])):
+        row = []
+        for j in range(len(table)):
+            row.append(table[j][i])
+
+        result.append(row)
+
+    return result
+
 class NFA:
     def __init__(self, is_file: bool, **kwargs):
         self.Q = set()
@@ -55,6 +67,7 @@ class NFA:
         q.append([0, self.initialState])  ## Starts from 0
         ans = False  ## Flag
 
+        result = list()
         while q and not ans:
             frontQ = q.popleft()
             idx = frontQ[0]
@@ -67,24 +80,42 @@ class NFA:
                 raise InputError(S[idx], 'Is not declared in sigma')
             elif state in self.delta:
                 ## Search through states
-                for transition in self.delta[state].items():
+                states_to_print = []
+                for transition in sorted(self.delta[state].items()):
                     d = transition[0]
                     states = transition[1]
 
                     if d == "_":
                         ## Is epsilon
+                        states_to_print.extend(states)
                         for state in states:
                             # Do not consume character
                             q.append([idx, state])
-                            print(f"Слово:_, индекс символа: {idx}, переход: {frontQ[1]} -> {state}")
+                        result.append(('_', idx, list(set(states_to_print))))
                     elif S[idx] == d:
+                        states_to_print.extend(states)
                         for state in states:
                             # Consume character
                             q.append([idx + 1, state])
-                            print(f"Слово:{S[idx]}, индекс символа: {idx}, переход: {frontQ[1]} -> {state}")
+                        result.append((S[idx], idx, list(set(states_to_print))))
 
         if S == "":
             ans = True
+
+        result = sorted(result, key=lambda x: (x[1], -ord(x[0])))
+        new_result = []
+        i = 0
+        for idx in range(len(S)):
+            idxable = [S[idx], idx, []]
+            while i < len(result) is not None and result[i][1] == idx:
+                idxable[2].extend(result[i][2])
+
+                i += 1
+
+            new_result.append((S[idx], idx, idxable[2]))
+
+        for sym, idx, states in new_result:
+            print(f'Слово: {sym}, индекс слова: {idx}, новые состояния: {list(set(states))}')
 
         return ans
 
@@ -336,21 +367,40 @@ class NFA:
         return nfa
 
     def show_data(self):
-        sigma = "\t".join(self.sigma)
-        sigma = f"\t\t{sigma}"
-        print(sigma)
-        alphabet = sorted(set(self.sigma.copy()))
+        # sigma = "\t".join(self.sigma)
+        # sigma = f"\t\t{sigma}"
+        # print(sigma)
+        alphabet = sorted(set([''] + self.sigma.copy()))
         alphabet.append('_')
+
+        first_col_len = 8
+        states = []
+        all_transitions = [list() for i in range(len(alphabet))]
         for state in self.Q:
             transitions = ''
-            for s in alphabet:
+            for idx, s in enumerate(alphabet, start=0):
                 cur = []
                 if s in self.delta[state]:
                     cur = self.delta[state][s]
-                transitions = f"{transitions}{'| ' if s == '_' else ''}{cur}\t"
+                all_transitions[idx].append(f'{cur}')
             if state == self.initialState:
                 state = f"->{state}"
             if state in self.F:
                 state = f"*{state}"
-            line = f"{state}\t{transitions}"
-            print(line)
+
+            states.append(state)
+
+        all_max_lens = [max(*list(map(len, states)))]
+        all_transitions = all_transitions[1:]
+        for transition in all_transitions:
+            all_max_lens.append(max(*list(map(len, transition))))
+
+        all_transitions = transpose([states, *all_transitions])
+        for column_idx in range(len(all_max_lens)):
+            print(f'{alphabet[column_idx]}{" " * (all_max_lens[column_idx] - len(alphabet[column_idx]))}', end=' ')
+        print()
+
+        for transition in all_transitions:
+            for column_idx in range(len(all_max_lens)):
+                print(f'{transition[column_idx]}{" " * (all_max_lens[column_idx] - len(transition[column_idx]))}', end=' ')
+            print()

@@ -3,16 +3,16 @@ from authomato.nfa import NFA
 
 
 def main():
-    d = DFA(is_file=True, path='dfa.txt')
-    if d.accept('aaabc'):
-        print('Цепочка распознана')
-    else:
-        print('Цепочка не распознана')
+    # d = DFA(is_file=True, path='dfa.txt')
+    # if d.accept('aaabc'):
+    #     print('Цепочка распознана')
+    # else:
+    #     print('Цепочка не распознана')
+    #
+    # d.show_data()
 
-    d.show_data()
-
-    # n = NFA(is_file=True, path='nfa.txt')
-    # n.show_data()
+    n = NFA(is_file=True, path='nfa.txt')
+    n.show_data()
     #
     # print('-' * 30)
     #
@@ -23,10 +23,10 @@ def main():
     #
     # n = n.getDFA()
     # n.show_data()
-    # if n.accept('bbaa'):
-    #     print('Цепочка распознана')
-    # else:
-    #     print('Цепочка не распознана')
+    if n.accept('baa'):
+        print('Цепочка распознана')
+    else:
+        print('Цепочка не распознана')
 
     # n = NFA(is_file=True, path='nfa.txt')
     # n.show_data()
